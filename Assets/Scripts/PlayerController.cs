@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float strength = 1;
 
     public Rigidbody2D rb;
+    public AudioSource over;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,5 +28,6 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         GameManager.Instance.OnGameOver();
+        over.Play();
     }
 }

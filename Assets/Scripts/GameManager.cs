@@ -11,18 +11,24 @@ public class GameManager : Singleton<GameManager>
     public PlayerController playerController;
     public int points = 0;
     public TextMeshProUGUI scoreText;
-
+    public TextMeshProUGUI HighScore;
+    public AudioSource GameStartMusic;
+    public AudioSource MenuMusic;
     public void StartGame()
     {
         menuUI.SetActive(false);
         pipeSpawner.enabled = true;
         playerController.enabled = true;
         playerController.rb.simulated = true;
+        GameStartMusic.Play();
+        
     }
 
     private void ShowLoseUI()
     {
         loseUI.SetActive(true);
+        GameStartMusic.Stop();
+        MenuMusic.Play();
     }
 
     public void RepeatGame()
@@ -34,11 +40,25 @@ public class GameManager : Singleton<GameManager>
     {
         ShowLoseUI();
         Time.timeScale = 0;
+        UpdateHighScore();
     }
 
     public void UpdateScore()
     {
         points++;
         scoreText.text = points.ToString();
+        CheckHighScore();
     }
+   void CheckHighScore()
+    {
+        if(points > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", points);
+        }
+    }
+    void UpdateHighScore()
+    {
+        HighScore.text = $"High Score: {PlayerPrefs.GetInt("HighScore", 0)}";
+    }
+    
 }
